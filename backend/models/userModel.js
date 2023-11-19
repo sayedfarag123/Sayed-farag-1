@@ -1,5 +1,5 @@
-const { default: mongoose } = require("mongoose");
-
+const mongoose = require("mongoose");
+const currentDateInCairo = new Date().toLocaleString('en-US', { timeZone: 'Africa/Cairo' });
 
 
 const UserSchema = new mongoose.Schema({
@@ -10,23 +10,22 @@ const UserSchema = new mongoose.Schema({
     phoneNumber: {
         required: true,
         type: String,
-        unique: true
+        unique: true,
     },
     parentPhoneNumber: {
         type: String,
     },
     group: {
         type: String,
-
     },
     role: {
         type: String,
         required: true,
-        default: 'طالب'
+        default: "طالب",
     },
-    level:{
-        type:Number,
-        required:true
+    level: {
+        type: Number,
+        required: true,
     },
     lessons: {
         type: [],
@@ -35,9 +34,12 @@ const UserSchema = new mongoose.Schema({
     comprehensiveExams: {
         type: [],
         default: [],
-    }
+    },
+    createdAt: {
+        type: String,
+        default: currentDateInCairo,
+    },
+});
 
-}, { timestamps: true })
-
-const User = mongoose.model('User', UserSchema)
-module.exports = User
+const User = mongoose.model("User", UserSchema);
+module.exports = User;

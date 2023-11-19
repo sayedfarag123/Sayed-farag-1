@@ -21,10 +21,11 @@ const Group = require("../models/groupModel");
 const getAnalytics = async (req, res) => {
     try {
         const endDate = new Date();
-        const startDate = moment(endDate).subtract(30, 'days').startOf('day').toDate();
+        const startDate = new Date(endDate.getTime() - 30 * 24 * 60 * 60 * 1000); // 30 days ago
+        const timeZone = 'Africa/Cairo';
 
         // Use Promise.all to execute multiple queries concurrently
-        const [groupedUsersByDay, getAllStudentsCount, l1StudentsCount, l2StudentsCount, l3StudentsCount,allGroups] = await Promise.all([
+        const [groupedUsersByDay, getAllStudentsCount, l1StudentsCount, l2StudentsCount, l3StudentsCount, allGroups] = await Promise.all([
             User.aggregate([
                 {
                     $match: {
@@ -33,7 +34,7 @@ const getAnalytics = async (req, res) => {
                 },
                 {
                     $group: {
-                        _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+                        _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt', timezone: timeZone } },
                         count: { $sum: 1 }
                     }
                 },
@@ -41,15 +42,14 @@ const getAnalytics = async (req, res) => {
                     $sort: { _id: 1 }
                 }
             ]),
-            User.countDocuments({role:'طالب'}),
-            User.countDocuments({ level: '1',role:'طالب' }),
-            User.countDocuments({ level: '2',role:'طالب' }),
-            User.countDocuments({ level: '3',role:'طالب' }),
+            User.countDocuments({ role: 'طالب' }),
+            User.countDocuments({ level: '1', role: 'طالب' }),
+            User.countDocuments({ level: '2', role: 'طالب' }),
+            User.countDocuments({ level: '3', role: 'طالب' }),
             Group.countDocuments()
         ]);
 
-        const studentsNums = [l1StudentsCount,l2StudentsCount,l3StudentsCount]
-
+        const studentsNums = [l1StudentsCount, l2StudentsCount, l3StudentsCount];
         return res.status(200).json({
             error: false,
             data: {
@@ -64,6 +64,7 @@ const getAnalytics = async (req, res) => {
         return res.status(500).json({ error: true, message: 'Internal server error' });
     }
 };
+
 
 
 

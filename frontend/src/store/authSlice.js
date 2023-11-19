@@ -278,7 +278,7 @@ const AuthSlice = createSlice({
             state.isLoading = false
             if (action.payload.role != 'admin' || 'مشرف') {
 
-                state.students.users.push(action.payload)
+                // state.students.users.push(action.payload)
             }
             toast.success('تم العمليه بنجاح')
         })

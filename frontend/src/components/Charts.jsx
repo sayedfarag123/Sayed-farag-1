@@ -98,7 +98,7 @@ const Charts = () => {
 
 
     return (
-        <div className=' sm:flex-row flex-col flex  text-center w-full my-4'>
+        <div className=' sm:flex-row flex-col flex  text-center w-full my-4  text-white'>
 
 
 

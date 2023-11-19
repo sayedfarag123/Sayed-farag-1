@@ -27,10 +27,11 @@ const createUser = async (req, res) => {
             parentPhoneNumber,
             group,
             level,
-            role
+            role,
+            createdAt:new Date().toLocaleString('en-US', { timeZone: 'Africa/Cairo' }),
         })
 
-
+console.log(new Date().toLocaleString('en-US', { timeZone: 'Africa/Cairo' }))
         return res.status(200).json({ error: false, user: createdUser })
 
 
