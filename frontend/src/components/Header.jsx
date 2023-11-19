@@ -18,7 +18,7 @@ const Header = () => {
           <span className="ml-3 text-xl">Sayed Farag</span>
         </a>
        {user && <><nav className="md:ml-auto md:mr-auto flex  flex-wrap items-center text-base justify-center bg-slate-100 dark:bg-slate-800 rounded-md -m-4 font-semibold">
-          <NavLink to='' className="mx-5 dark:hover:text-white  hover:text-blue-500 p-5">لوحه التحكم</NavLink>
+          <NavLink to='/dashboard/dashboard' className="mx-5 dark:hover:text-white  hover:text-blue-500 p-5">الاحصائيات</NavLink>
           <NavLink to='/dashboard/students' className="mx-5 dark:hover:text-white hover:text-blue-500 p-5">قائمة الطلاب</NavLink>
           <NavLink to='/dashboard/groups' className="mx-5 dark:hover:text-white hover:text-blue-500 p-5">قائمة المجموعات</NavLink>
           {/* <NavLink to='' className="mr-5 hover:text-white">Fourth Link</NavLink> */}

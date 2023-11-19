@@ -11,7 +11,8 @@ export const checkLoggedIn = createAsyncThunk('auth/checkLoggedIn', async (id, {
         return res.data.user
 
     } catch (error) {
-        toast.error('حدث خطأ ما يرجي اعاده المحاولة')
+        localStorage.clear()
+        // toast.error('حدث خطأ ما يرجي اعاده المحاولة')
         return rejectWithValue(error.response.data.message)
     }
 
@@ -27,7 +28,7 @@ export const signIn = createAsyncThunk('auth/signIn', async (userData, { rejectW
         return res.data.user
 
     } catch (error) {
-        toast.error('حدث خطأ ما يرجي اعاده المحاولة')
+        toast.error(error.response.data.message)
         return rejectWithValue(error.response.data.message)
     }
 
@@ -64,19 +65,19 @@ export const logout = createAsyncThunk('auth/logout', async (userData, { rejectW
 
 })
 
-export const getStudents = createAsyncThunk('auth/getStudents', async (data, { rejectWithValue, getState }) => {
+// export const getStudents = createAsyncThunk('auth/getStudents', async (data, { rejectWithValue, getState }) => {
 
-    try {
-        const res = await axios.post(`/api/students/get-students/`,data, { withCredentials: true })
+//     try {
+//         const res = await axios.post(`/api/students/get-students/`, data, { withCredentials: true })
 
-        return res.data
+//         return res.data
 
-    } catch (error) {
-        toast.error('حدث خطأ ما يرجي اعاده المحاولة')
-        return rejectWithValue(error.response.data.message)
-    }
+//     } catch (error) {
+//         toast.error('حدث خطأ ما يرجي اعاده المحاولة')
+//         return rejectWithValue(error.response.data.message)
+//     }
 
-})
+// })
 
 
 export const deleteStudent = createAsyncThunk('auth/deleteStudent', async (id, { rejectWithValue, getState }) => {
@@ -93,10 +94,12 @@ export const deleteStudent = createAsyncThunk('auth/deleteStudent', async (id, {
     }
 
 })
+
+
 export const searchStudents = createAsyncThunk('auth/searchStudents', async (data, { rejectWithValue, getState }) => {
 
     try {
-        const res = await axios.post(`/api/students/search-students`,data, { withCredentials: true })
+        const res = await axios.post(`/api/students/search-students`, data, { withCredentials: true })
 
         return res.data
 
@@ -106,6 +109,24 @@ export const searchStudents = createAsyncThunk('auth/searchStudents', async (dat
     }
 
 })
+
+
+export const editStudents = createAsyncThunk('auth/editStudents', async (data, { rejectWithValue, getState }) => {
+
+    try {
+        //editStudents
+        const res = await axios.put(`/api/students/edit-student`, data, { withCredentials: true })
+
+        return res.data.user
+
+    } catch (error) {
+        toast.error('حدث خطأ ما يرجي اعاده المحاولة')
+        return rejectWithValue(error.response.data.message)
+    }
+
+})
+
+
 
 
 // export const deleteAllStudents = createAsyncThunk('auth/delete-all-students', async (query, { rejectWithValue, getState }) => {
@@ -152,7 +173,7 @@ export const searchStudents = createAsyncThunk('auth/searchStudents', async (dat
 const initstate = {
     user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
     isLoading: false,
-    students: []
+    // students: []
 }
 
 const AuthSlice = createSlice({
@@ -190,7 +211,7 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
             state.user = action.payload
-            toast('اهلا '+state?.user?.name,{toastId:'232rfre'})
+            toast('اهلا ' + state?.user?.name, { toastId: '232rfre' })
 
         })
         builder.addCase(checkLoggedIn.rejected, (state, action) => {
@@ -231,21 +252,21 @@ const AuthSlice = createSlice({
             state.isLoading = false
         })
 
-        //getStudents
-        builder.addCase(getStudents.pending, (state, action) => {
+        // //getStudents
+        // builder.addCase(getStudents.pending, (state, action) => {
 
-            state.isLoading = true
-        })
-        builder.addCase(getStudents.fulfilled, (state, action) => {
+        //     state.isLoading = true
+        // })
+        // builder.addCase(getStudents.fulfilled, (state, action) => {
 
-            state.isLoading = false
-            state.students = action.payload
+        //     state.isLoading = false
+        //     state.students = action.payload
 
-        })
-        builder.addCase(getStudents.rejected, (state, action) => {
+        // })
+        // builder.addCase(getStudents.rejected, (state, action) => {
 
-            state.isLoading = false
-        })
+        //     state.isLoading = false
+        // })
 
         //createUser
         builder.addCase(createUser.pending, (state, action) => {
@@ -277,6 +298,21 @@ const AuthSlice = createSlice({
             toast.success('تم العمليه بنجاح')
         })
         builder.addCase(deleteStudent.rejected, (state, action) => {
+
+            state.isLoading = false
+        })
+        //createUser
+        builder.addCase(editStudents.pending, (state, action) => {
+
+            state.isLoading = true
+        })
+        builder.addCase(editStudents.fulfilled, (state, action) => {
+
+            state.isLoading = false
+
+            toast.success('تم العمليه بنجاح')
+        })
+        builder.addCase(editStudents.rejected, (state, action) => {
 
             state.isLoading = false
         })

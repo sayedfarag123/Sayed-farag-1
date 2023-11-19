@@ -3,10 +3,18 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { IoClose } from 'react-icons/io5';
 import { useDispatch } from 'react-redux';
 import { createUser } from '../../store/authSlice';
+import { useEffect } from 'react';
+import { getGroups } from '../../store/dashboardSlice';
 
 const AddStudent = ({ groups }) => {
     const [isOpen, setisOpen] = useState(false)
+    const [Level, setLevel] = useState('1')
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getGroups(Level))
+        
+    }, [Level])
 
 
     const handleSubmit = (e) => {
@@ -16,10 +24,9 @@ const AddStudent = ({ groups }) => {
             phoneNumber: e.target.phoneNo.value,
             parentPhoneNumber: e.target.parePhoneNo.value,
             group: e.target.group.value,
-            level:parseInt(e.target.level.value.slice(5,6)) ,
+            level: parseInt(e.target.level.value.slice(5, 6)),
             role: e.target.role.value,
         }
-        console.log(data)
         dispatch(createUser(data))
         setisOpen(false)
     }
@@ -48,7 +55,7 @@ const AddStudent = ({ groups }) => {
                     <div>
                         <div className=' w-1/2 inline-block px-1 my-3'>
                             <label htmlFor="username" className="block text-sm text-gray-500 dark:text-gray-300">رقم الطالب</label>
-                            <input  maxLength={11}  type="text" name='phoneNo' className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
+                            <input maxLength={11} type="text" name='phoneNo' className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" />
                         </div>
                         <div className=' w-1/2 inline-block px-1'>
                             <label htmlFor="username" className="block text-sm text-gray-500 dark:text-gray-300">المجموعه</label>
@@ -64,7 +71,7 @@ const AddStudent = ({ groups }) => {
                         <div className=' w-1/2 inline-block px-1 my-3'>
                             <label htmlFor="username" className="block text-sm text-gray-500 dark:text-gray-300">المرحله الدراسيه</label>
 
-                            <select name='level' className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" >
+                            <select  onChange={e => setLevel(e.target.value.slice(5, 6))} name='level' className="block  mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-gray-700 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:focus:border-blue-300" >
                                 <option>ثانوي1</option>
                                 <option>ثانوي2</option>
                                 <option>ثانوي3</option>

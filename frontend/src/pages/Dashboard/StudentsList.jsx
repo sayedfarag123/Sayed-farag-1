@@ -1,27 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { IoClose, IoCloudUploadOutline, IoSearchOutline } from "react-icons/io5";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
-import { deleteStudent, getStudents, searchStudents } from '../../store/authSlice';
+import { deleteStudent, searchStudents } from '../../store/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import AddStudent from '../../components/dashboard/AddStudent';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import { useNavigate } from 'react-router-dom';
+import { getGroups,getStudents } from '../../store/dashboardSlice';
 
 
 const StudentsList = () => {
     const dispatch = useDispatch()
-    const { students } = useSelector(s => s.Auth)
+    const { students } = useSelector(s => s.Dashboard)
     const [popup, setpopup] = useState(false)
     const [stud, setstud] = useState()
     const [query, setsearchQuery] = useState()
     const { groups } = useSelector(s => s.Dashboard)
+    const navigate = useNavigate()
+    const [Level, setLevel] = useState('ع')
 
-
-
+    
 
     useEffect(() => {
-        dispatch(getStudents({ page: 1 }))
-    }, [])
+        
+        Level == 'ع'? dispatch(getStudents({ page: 1 })): dispatch(getStudents({ page: 1,Level }))
+        Level == 'ع'? dispatch(getGroups('all')):dispatch(getGroups(Level))
+    }, [Level])
 
     const deletestudent = () => {
         setpopup(false)
@@ -98,13 +103,13 @@ const StudentsList = () => {
 
                 <div className="mt-6 md:flex md:items-center md:justify-between">
                     <div>
-                    <div className="inline-flex overflow-hidden bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
-                        <select className="w-48 dark:text-white outline-none p-2  text-sm bg-white border border-gray-300 rounded-lg shadow-md dark:bg-gray-700 dark:border-gray-600">
-                            <option>الجميع</option>
-                            {groups?.map(grp => <option key={Math.random()}>{grp.group}</option>)}
-                        </select>
-                    </div>
-                    
+                        <div className="inline-flex overflow-hidden bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
+                            <select selected={Level == 'ع'} onChange={e => setLevel(e.target.value.slice(5, 6))} className="w-48 dark:text-white outline-none p-2  text-sm bg-white border border-gray-300 rounded-lg shadow-md dark:bg-gray-700 dark:border-gray-600">
+                                <option>الجميع</option>
+                                {[1, 2, 3].map(lvl=> <option selected={Level == lvl} key={Math.random()} >ثانوي{lvl}</option>)}
+                            </select>
+                        </div>
+
                     </div>
 
                     <form onSubmit={applySearch} className="relative flex items-center mt-4 md:mt-0">
@@ -187,7 +192,7 @@ const StudentsList = () => {
                                             <td className="px-4 py-4 text-sm whitespace-nowrap">
                                                 <div className="flex items-center gap-x-6">
 
-                                                    <button className="text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none">
+                                                    <button onClick={() => navigate(`/dashboard/edit-student/${std._id.toString()}`)} className="text-gray-500 transition-colors duration-200 dark:hover:text-yellow-500 dark:text-gray-300 hover:text-yellow-500 focus:outline-none">
 
                                                         <FaRegEdit className="w-5 h-5" />
                                                     </button>

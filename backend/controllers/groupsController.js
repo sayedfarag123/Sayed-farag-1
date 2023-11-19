@@ -10,7 +10,7 @@ const addGroup = async (req, res) => {
         return res.status(200).json({ error: false, group })
 
     } catch (error) {
-        console.error("Error in checkLoggedIn function:", error);
+        console.error("Error in checkLoggedIn function:", error.message);
         return res.status(400).json({ error: true, message: 'internal server error' })
 
     }
@@ -49,8 +49,12 @@ const deleteGroups = async (req, res) => {
 
 
 
+
+
+
 module.exports = {
     addGroup,
     getGroups,
     deleteGroups,
+
 }

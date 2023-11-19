@@ -13,6 +13,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import { checkLoggedIn } from './store/authSlice';
 import GroupsList from './pages/Dashboard/GroupsList';
+import EditStudent from './pages/Dashboard/EditStudent';
+import Dashboard from './pages/Dashboard/Dashboard';
 
 
 
@@ -38,17 +40,17 @@ function App() {
     existingThemes.forEach((theme) => {
       document.body.classList.remove(theme);
     });
-  
+
     // Add the new theme class to body
     document.body.classList.add(changedTheme);
-  
+
     // Update state and save theme to local storage
     settheme(changedTheme);
     localStorage.setItem("theme", changedTheme);
   };
   useEffect(() => {
     document.body.classList.add(theme);
-    dispatch(checkLoggedIn())
+    user && dispatch(checkLoggedIn())
   }, [])
 
 
@@ -74,10 +76,19 @@ function App() {
           <Routes>
             <Route path='/' element={<CheckAuth><Home /></CheckAuth>} />
             <Route path='/login' element={<CheckNotAuth><Login /></CheckNotAuth>} />
-            <Route path='/dashboard' >
-              <Route path='students' element={<StudentsList />} />
-              <Route path='groups' element={<GroupsList />} />
-            </Route>
+            <Route
+              path='/dashboard/*'
+              element={
+                <CheckAuth>
+                  <Routes>
+                    <Route path='dashboard' element={<Dashboard />} />
+                    <Route path='students' element={<StudentsList />} />
+                    <Route path='edit-student/:id' element={<EditStudent />} />
+                    <Route path='groups' element={<GroupsList />} />
+                  </Routes>
+                </CheckAuth>
+              }
+            />
 
           </Routes>
         </BrowserRouter>

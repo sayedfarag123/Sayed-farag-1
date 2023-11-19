@@ -10,9 +10,9 @@ const getStudents = async (req, res) => {
         const limit = parseInt(req.query.limit) || 3;
         const skip = (page - 1) * limit;
 
-        const filter = req.body.group
+        const filter = req.body.Level
 
-        const query = filter ? { group: filter, role: 'طالب' } : { role: 'طالب' }
+        const query = filter ? { level: filter, role: 'طالب' } : { role: 'طالب' }
 
 
         const users = await User.find(query)
@@ -32,7 +32,7 @@ const getStudents = async (req, res) => {
 
     } catch (error) {
 
-        console.error("Error in checkLoggedIn function:", error);
+        console.error("Error in checkLoggedIn function:", error.message);
         return res.status(400).json({ error: true, message: 'internal server error' })
 
     }
@@ -94,9 +94,126 @@ const deleteStudent = async (req, res) => {
     }
 }
 
+const getStudent = async (req, res) => {
+    const { id } = req.params
+    try {
+        const student = await User.findById(id)
+
+        return res.status(200).json({ error: false, student })
+
+    } catch (error) {
+        console.error("Error in checkLoggedIn function:", error.message);
+        return res.status(400).json({ error: true, message: 'internal server error' })
+
+    }
+}
+
+const addCompExam = async (req, res) => {
+    const { exam, id } = req.body
+    try {
+        const student = await User.findByIdAndUpdate(id,
+            { $push: { comprehensiveExams: exam } },
+            { new: true },)
+
+
+
+        return res.status(200).json({ error: false, student })
+
+    } catch (error) {
+        console.error("Error in checkLoggedIn function:", error.message);
+        return res.status(400).json({ error: true, message: 'internal server error' })
+
+    }
+}
+
+
+const removeCompExam = async (req, res) => {
+    const { exam, id } = req.body
+    try {
+
+        const student = await User.findByIdAndUpdate(id,
+            { $pull: { comprehensiveExams: exam } },
+            { new: true },)
+
+
+
+        return res.status(200).json({ error: false, student })
+
+    } catch (error) {
+        console.error("Error in checkLoggedIn function:", error.message);
+        return res.status(400).json({ error: true, message: 'internal server error' })
+
+    }
+}
+
+
+const editStudent = async (req, res) => {
+    const data = req.body
+    try {
+        const student = await User.findByIdAndUpdate(data.id, data.data)
+
+
+
+        return res.status(200).json({ error: false, student })
+
+    } catch (error) {
+        console.error("Error in checkLoggedIn function:", error.message);
+        return res.status(400).json({ error: true, message: 'internal server error' })
+
+    }
+}
+
+const addLesson = async (req, res) => {
+    const { lesson, id } = req.body
+
+        console.log(req.body)
+        try {
+        const student = await User.findByIdAndUpdate(id,
+            { $push: { lessons:lesson } },
+            { new: true },)
+
+
+        return res.status(200).json({ error: false, student })
+
+
+    } catch (error) {
+        return res.status(400).json(error.message)
+
+    }
+
+
+}
+
+
+const removeLesson = async (req, res) => {
+    const { lesson, id } = req.body
+    try {
+        const student = await User.findByIdAndUpdate(id,
+            { $pull: { lessons:lesson } },
+            { new: true },)
+
+
+        return res.status(200).json({ error: false, student })
+
+
+    } catch (error) {
+        return res.status(400).json(error.message)
+
+    }
+
+
+}
+
 
 module.exports = {
     getStudents,
     deleteStudent,
     searchStudents,
+    getStudent,
+    editStudent,
+    addCompExam,
+    removeCompExam,
+    removeLesson,
+    addLesson,
+
 }

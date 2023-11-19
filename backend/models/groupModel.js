@@ -10,6 +10,7 @@ const GroupSchema = new mongoose.Schema({
     level: {
         required: true,
         type: String,
+        index: false,
     }
     
 
