@@ -69,7 +69,7 @@ function App() {
           className=" dark:text-white  w-9 h-6 p-1  rounded-xl"
         />
       </div>
-      <div className=' min-h-screen dark:bg-slate-950 bg-[#eee]'>
+      <div className=' min-h-screen dark:bg-slate-950 bg-[#eee] pb-5'>
         <ToastContainer theme={theme} pauseOnFocusLoss={false} />
         <BrowserRouter>
           <Header />

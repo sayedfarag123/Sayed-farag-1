@@ -56,14 +56,13 @@ const Charts = () => {
     };
 
 
-    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
+ 
     const data = {
-        labels:dbData.map(d=>d._id),
+        labels:dbData?.groupedUsersByDay?.map(d=>d._id),
         datasets: [
             {
                 label: 'عدد الطلاب',
-                data:dbData.map(d=>d.count),
+                data:dbData?.groupedUsersByDay?.map(d=>d.count),
                 borderColor: 'rgb(79 70 229 /1)',
                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
                 borderWidth: 7,
@@ -82,7 +81,7 @@ const Charts = () => {
         datasets: [
             {
                 label: 'عدد الطلاب',
-                data: pielabels.map(() => Math.random() * 100),
+                data: dbData?.studentsNums?.map((e) => e),
                 borderColor: 'rgb(79 70 229 /1)',
                 backgroundColor: ['rgb(99 102 241)', 'rgb(14 165 233)', 'rgb(59 130 246)']
 
@@ -99,7 +98,7 @@ const Charts = () => {
 
 
     return (
-        <div className=' sm:flex block text-center w-full my-4'>
+        <div className=' sm:flex-row flex-col flex  text-center w-full my-4'>
 
 
 

@@ -209,7 +209,7 @@ const initstate = {
     groups: [],
     user:'',
     students:[],
-    dbData:[]
+    dbData:{}
 }
 
 const AuthSlice = createSlice({

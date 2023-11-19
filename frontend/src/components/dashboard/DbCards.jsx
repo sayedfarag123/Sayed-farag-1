@@ -1,8 +1,11 @@
 import React from 'react'
 import { FaLayerGroup, FaUsers } from "react-icons/fa";
+import { useSelector } from 'react-redux';
 
 
 const DbCards = () => {
+    const {dbData} = useSelector(s=>s.Dashboard)
+
     return (
         <div className=' text-center w-full'>
 
@@ -13,7 +16,7 @@ const DbCards = () => {
                     </div>
                     <div className="p-4 text-right">
                         <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">عدد الطلاب</p>
-                        <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">900</h4>
+                        <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">{dbData?.getAllStudentsCount}</h4>
                     </div>
                     <div className="border-t dark:border-slate-500 border-blue-gray-50 p-4">
                     </div>
@@ -28,7 +31,7 @@ const DbCards = () => {
                     </div>
                     <div className="p-4 text-right">
                         <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">عدد المجموعات</p>
-                        <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">49</h4>
+                        <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">{dbData?.allGroups}</h4>
                     </div>
                     <div className="border-t dark:border-slate-500 border-blue-gray-50 p-4">
                     </div>
