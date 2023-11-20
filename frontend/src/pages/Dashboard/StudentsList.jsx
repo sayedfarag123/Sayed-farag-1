@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { IoClose, IoCloudUploadOutline, IoSearchOutline } from "react-icons/io5";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
-import { deleteStudent, searchStudents } from '../../store/authSlice';
+import { deleteStudent } from '../../store/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import AddStudent from '../../components/dashboard/AddStudent';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { useNavigate } from 'react-router-dom';
-import { getGroups,getStudents } from '../../store/dashboardSlice';
+import { getGroups, getStudents,searchStudents } from '../../store/dashboardSlice';
 
 
 const StudentsList = () => {
@@ -20,12 +20,12 @@ const StudentsList = () => {
     const navigate = useNavigate()
     const [Level, setLevel] = useState('ع')
 
-    
+
 
     useEffect(() => {
-        
-        Level == 'ع'? dispatch(getStudents({ page: 1 })): dispatch(getStudents({ page: 1,Level }))
-        Level == 'ع'? dispatch(getGroups('all')):dispatch(getGroups(Level))
+
+        Level == 'ع' ? dispatch(getStudents({ page: 1 })) : dispatch(getStudents({ page: 1, Level }))
+        Level == 'ع' ? dispatch(getGroups('all')) : dispatch(getGroups(Level))
     }, [Level])
 
     const deletestudent = () => {
@@ -106,18 +106,20 @@ const StudentsList = () => {
                         <div className="inline-flex overflow-hidden bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
                             <select selected={Level == 'ع'} onChange={e => setLevel(e.target.value.slice(5, 6))} className="w-48 dark:text-white outline-none p-2  text-sm bg-white border border-gray-300 rounded-lg shadow-md dark:bg-gray-700 dark:border-gray-600">
                                 <option>الجميع</option>
-                                {[1, 2, 3].map(lvl=> <option selected={Level == lvl} key={Math.random()} >ثانوي{lvl}</option>)}
+                                {[1, 2, 3].map(lvl => <option selected={Level == lvl} key={Math.random()} >ثانوي{lvl}</option>)}
                             </select>
                         </div>
 
                     </div>
 
-                    <form onSubmit={applySearch} className="relative flex items-center mt-4 md:mt-0">
+                    <div className="relative flex items-center mt-4 md:mt-0">
 
                         <IoSearchOutline className="w-5 h-5 -mr-7 z-30 text-gray-400 dark:text-gray-600" />
-                        <input onChange={(e) => setsearchQuery(e.target.value)} type="text" placeholder="Search" className="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+                        <form onSubmit={applySearch}>
+                            <input onChange={(e) => setsearchQuery(e.target.value)} type="text" placeholder="Search" className="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+                        </form>
                         {query && <button onClick={() => dispatch(getStudents({ page: 1 }))} type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mx-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">الغاء</button>}
-                    </form>
+                    </div>
 
                 </div>
 

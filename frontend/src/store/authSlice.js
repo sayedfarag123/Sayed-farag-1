@@ -96,20 +96,6 @@ export const deleteStudent = createAsyncThunk('auth/deleteStudent', async (id, {
 })
 
 
-export const searchStudents = createAsyncThunk('auth/searchStudents', async (data, { rejectWithValue, getState }) => {
-
-    try {
-        const res = await axios.post(`/api/students/search-students`, data, { withCredentials: true })
-
-        return res.data
-
-    } catch (error) {
-        toast.error('حدث خطأ ما يرجي اعاده المحاولة')
-        return rejectWithValue(error.response.data.message)
-    }
-
-})
-
 
 export const editStudents = createAsyncThunk('auth/editStudents', async (data, { rejectWithValue, getState }) => {
 
@@ -127,47 +113,6 @@ export const editStudents = createAsyncThunk('auth/editStudents', async (data, {
 })
 
 
-
-
-// export const deleteAllStudents = createAsyncThunk('auth/delete-all-students', async (query, { rejectWithValue, getState }) => {
-
-//     try {
-//         const res = await axios.delete(`/api/users/delete-all-students`, { withCredentials: true })
-
-//         return res.data
-
-//     } catch (error) {
-//         return rejectWithValue(error.response.data.message)
-//     }
-
-// })
-
-// export const toggleGroups = createAsyncThunk('auth/toggle-groups', async (sentGroup, { rejectWithValue, getState }) => {
-
-//     try {
-//         const res = await axios.put(`/api/users/toggle-group`, { sentGroup }, { withCredentials: true })
-
-//         return res.data
-
-//     } catch (error) {
-//         return rejectWithValue(error.response.data.message)
-//     }
-
-// })
-
-
-// export const getGroups = createAsyncThunk('auth/get-groups', async (sentGroup, { rejectWithValue, getState }) => {
-
-//     try {
-//         const res = await axios.get(`/api/users/get-groups`, { withCredentials: true })
-
-//         return res.data
-
-//     } catch (error) {
-//         return rejectWithValue(error.response.data.message)
-//     }
-
-// })
 
 
 const initstate = {
@@ -237,20 +182,7 @@ const AuthSlice = createSlice({
         })
 
         //searchStudents
-        builder.addCase(searchStudents.pending, (state, action) => {
 
-            state.isLoading = true
-        })
-        builder.addCase(searchStudents.fulfilled, (state, action) => {
-
-            state.isLoading = false
-            state.students = action.payload
-
-        })
-        builder.addCase(searchStudents.rejected, (state, action) => {
-
-            state.isLoading = false
-        })
 
         // //getStudents
         // builder.addCase(getStudents.pending, (state, action) => {

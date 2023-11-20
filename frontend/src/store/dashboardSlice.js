@@ -204,6 +204,20 @@ export const getStudents = createAsyncThunk('auth/getStudents', async (data, { r
 
 
 
+export const searchStudents = createAsyncThunk('auth/searchStudents', async (data, { rejectWithValue, getState }) => {
+
+    try {
+        const res = await axios.post(`/api/students/search-students`, data, { withCredentials: true })
+
+        return res.data
+
+    } catch (error) {
+        toast.error('حدث خطأ ما يرجي اعاده المحاولة')
+        return rejectWithValue(error.response.data.message)
+    }
+
+})
+
 
 const initstate = {
     groups: [],
@@ -254,6 +268,21 @@ const AuthSlice = createSlice({
 
         })
         builder.addCase(getStudents.rejected, (state, action) => {
+
+            state.isLoading = false
+        })
+
+        builder.addCase(searchStudents.pending, (state, action) => {
+
+            state.isLoading = true
+        })
+        builder.addCase(searchStudents.fulfilled, (state, action) => {
+
+            state.isLoading = false
+            state.students = action.payload
+
+        })
+        builder.addCase(searchStudents.rejected, (state, action) => {
 
             state.isLoading = false
         })
