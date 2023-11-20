@@ -7,7 +7,7 @@ const User = require("../models/userModel");
 const getStudents = async (req, res) => {
     try {
         const page = parseInt(req.body.page) || 1;
-        const limit = parseInt(req.query.limit) || 3;
+        const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
         const filter = req.body.Level
@@ -40,7 +40,7 @@ const getStudents = async (req, res) => {
 const searchStudents = async (req, res) => {
     try {
         const page = parseInt(req.body.page) || 1;
-        const limit = parseInt(req.query.limit) || 3;
+        const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
         const searchQuery = req.body.query
@@ -166,7 +166,6 @@ const editStudent = async (req, res) => {
 const addLesson = async (req, res) => {
     const { lesson, id } = req.body
 
-        console.log(req.body)
         try {
         const student = await User.findByIdAndUpdate(id,
             { $push: { lessons:lesson } },

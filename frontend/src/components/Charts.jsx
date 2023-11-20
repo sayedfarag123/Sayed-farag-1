@@ -58,7 +58,7 @@ const Charts = () => {
 
  
     const data = {
-        labels:dbData?.groupedUsersByDay?.map(d=>d._id),
+        labels:dbData?.groupedUsersByDay?.map(d=>d._id.slice(5,10)),
         datasets: [
             {
                 label: 'عدد الطلاب',

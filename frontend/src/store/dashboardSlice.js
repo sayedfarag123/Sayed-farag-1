@@ -20,7 +20,7 @@ export const createGroup = createAsyncThunk('auth/createGroup', async (data, { r
         return res.data.group
 
     } catch (error) {
-        
+
         toast.error('حدث خطأ ما يرجي اعاده المحاولة')
         console.log(error)
         return rejectWithValue(error.response.data.message)
@@ -42,7 +42,7 @@ export const getGroups = createAsyncThunk('auth/getGroups', async (data, { rejec
         return res.data.groups
 
     } catch (error) {
-        
+
         toast.error('حدث خطأ ما يرجي اعاده المحاولة')
         console.log(error)
         return rejectWithValue(error.response.data.message)
@@ -62,7 +62,7 @@ export const deleteGroup = createAsyncThunk('auth/deleteGroup', async (data, { r
         return res.data
 
     } catch (error) {
-        
+
         toast.error('حدث خطأ ما يرجي اعاده المحاولة')
         console.log(error)
         return rejectWithValue(error.response.data.message)
@@ -81,7 +81,7 @@ export const getStudent = createAsyncThunk('auth/getStudent', async (id, { rejec
         return res.data.student
 
     } catch (error) {
-        
+
         toast.error('حدث خطأ ما يرجي اعاده المحاولة')
         console.log(error)
         return rejectWithValue(error.response.data.message)
@@ -96,12 +96,12 @@ export const addCompExam = createAsyncThunk('auth/addCompExam', async (data, { r
 
     try {
         //addCompExam
-        const res = await axios.put(`/api/students/add-comp-exam`,data, { withCredentials: true })
+        const res = await axios.put(`/api/students/add-comp-exam`, data, { withCredentials: true })
 
         return res.data.student
 
     } catch (error) {
-        
+
         toast.error('حدث خطأ ما يرجي اعاده المحاولة')
         console.log(error)
         return rejectWithValue(error.response.data.message)
@@ -113,15 +113,15 @@ export const addCompExam = createAsyncThunk('auth/addCompExam', async (data, { r
 
 
 export const removeCompExam = createAsyncThunk('auth/addCompExam', async (data, { rejectWithValue, getState }) => {
-   try {
+    try {
         //removeCompExam
-        
-        const res = await axios.put(`/api/students/remove-comp-exam`,data, { withCredentials: true })
+
+        const res = await axios.put(`/api/students/remove-comp-exam`, data, { withCredentials: true })
 
         return res.data.student
 
     } catch (error) {
-        
+
         toast.error('حدث خطأ ما يرجي اعاده المحاولة')
         console.log(error)
         return rejectWithValue(error.response.data.message)
@@ -135,12 +135,12 @@ export const addlesson = createAsyncThunk('auth/addlesson', async (data, { rejec
 
     try {
         //addlesson
-        const res = await axios.put(`/api/students/add-lesson`,data, { withCredentials: true })
+        const res = await axios.put(`/api/students/add-lesson`, data, { withCredentials: true })
 
         return res.data.student
 
     } catch (error) {
-        
+
         toast.error('حدث خطأ ما يرجي اعاده المحاولة')
         console.log(error)
         return rejectWithValue(error.response.data.message)
@@ -152,15 +152,15 @@ export const addlesson = createAsyncThunk('auth/addlesson', async (data, { rejec
 
 
 export const removelesson = createAsyncThunk('auth/removelesson', async (data, { rejectWithValue, getState }) => {
-   try {
+    try {
         //removeCompExam
-        
-        const res = await axios.put(`/api/students/remove-lesson`,data, { withCredentials: true })
+
+        const res = await axios.put(`/api/students/remove-lesson`, data, { withCredentials: true })
 
         return res.data.student
 
     } catch (error) {
-        
+
         toast.error('حدث خطأ ما يرجي اعاده المحاولة')
         console.log(error)
         return rejectWithValue(error.response.data.message)
@@ -219,11 +219,27 @@ export const searchStudents = createAsyncThunk('auth/searchStudents', async (dat
 })
 
 
+
+
+export const uplodaFile = createAsyncThunk('auth/uplodaFile', async (formData, { rejectWithValue, getState, dispatch }) => {
+    try {
+        await axios.post(`/api/upload-file/upload-excel-cheat`, formData, { withCredentials: true })
+
+        // dispatch(getStudent({ page:1}))
+
+    } catch (error) {
+        toast.error('حدث خطأ ما يرجي اعاده المحاولة')
+        return rejectWithValue(error.response.data.message)
+    }
+
+})
+
+
 const initstate = {
     groups: [],
-    user:'',
-    students:[],
-    dbData:{}
+    user: '',
+    students: [],
+    dbData: {}
 }
 
 const AuthSlice = createSlice({
@@ -232,11 +248,28 @@ const AuthSlice = createSlice({
     reducers: {
         togglePopUp: (state, action) => {
             state.popup.show = !state.popup.show
-            state.popup.value = action.payload   
+            state.popup.value = action.payload
         },
 
     },
     extraReducers: (builder) => {
+
+
+        //uplodaFile
+        builder.addCase(uplodaFile.pending, (state, action) => {
+
+            state.isLoading = true
+        })
+        builder.addCase(uplodaFile.fulfilled, (state, action) => {
+
+            state.isLoading = false
+            toast.success('تم العمليه بنجاح')
+
+        })
+        builder.addCase(uplodaFile.rejected, (state, action) => {
+
+            state.isLoading = false
+        })
 
 
         //getAnalytics
@@ -302,7 +335,7 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
         })
-    
+
         //get groups
         builder.addCase(getGroups.pending, (state, action) => {
 
@@ -317,7 +350,7 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
         })
-    
+
         //get groups
         builder.addCase(deleteGroup.pending, (state, action) => {
 
@@ -334,7 +367,7 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
         })
-    
+
         //get groups
         builder.addCase(getStudent.pending, (state, action) => {
 
@@ -350,7 +383,7 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
         })
-    
+
         //get comp exam
         builder.addCase(addCompExam.pending, (state, action) => {
 
@@ -367,7 +400,7 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
         })
-    
+
         //get lesson
         builder.addCase(addlesson.pending, (state, action) => {
 
@@ -384,7 +417,7 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
         })
-    
+
         //get lesson
         builder.addCase(removelesson.pending, (state, action) => {
 

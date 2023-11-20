@@ -2,21 +2,6 @@ const moment = require("moment/moment");
 const User = require("../models/userModel");
 const Group = require("../models/groupModel");
 
-// function groupUsersByDay(users) {
-//     const groupedUsers = {};
-
-//     users.forEach(user => {
-//         const day = moment(user.createdAt).format('YYYY-MM-DD');
-
-//         if (!groupedUsers[day]) {
-//             groupedUsers[day] = [];
-//         }
-
-//         groupedUsers[day].push(user);
-//     });
-
-//     return groupedUsers;
-// }
 
 const getAnalytics = async (req, res) => {
     try {

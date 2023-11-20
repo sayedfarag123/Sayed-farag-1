@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { IoClose, IoCloudUploadOutline, IoSearchOutline } from "react-icons/io5";
+import { IoClose,  IoSearchOutline } from "react-icons/io5";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import { deleteStudent } from '../../store/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { useNavigate } from 'react-router-dom';
 import { getGroups, getStudents,searchStudents } from '../../store/dashboardSlice';
+import UploadFile from '../../components/dashboard/UploadFile';
 
 
 const StudentsList = () => {
@@ -43,6 +44,9 @@ const StudentsList = () => {
     const paginate = (page) => {
         query ? dispatch(searchStudents({ page, query })) : dispatch(getStudents({ page }))
     }
+
+
+
 
     return (
         <div className=' max-w-[95%]  mx-auto   '>
@@ -90,10 +94,11 @@ const StudentsList = () => {
                             <h2 className="text-lg font-medium text-gray-800 dark:text-white">الطلاب</h2>
                         </div></div>
                     <div className="flex items-center mt-4 gap-x-3">
-                        <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto dark:hover:bg-gray-800 dark:bg-gray-900 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700">
+                        {/* <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto dark:hover:bg-gray-800 dark:bg-gray-900 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700">
                             <IoCloudUploadOutline className=' w-5 h-5' />
                             <span>Import</span>
-                        </button>
+                        </button> */}
+                        <UploadFile />
 
 
                         <AddStudent groups={groups} />

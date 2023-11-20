@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 app.use(rateLimiting({
   windowMs: 10 * 60 * 1000,
-  max: 8200,
+  max: 1200,
 }))
 app.use(
   helmet.contentSecurityPolicy({
@@ -33,6 +33,7 @@ app.use('/api/users', require('./routes/userRoute'))
 app.use('/api/students', require('./routes/studentsRoutes'))
 app.use('/api/groups', require('./routes/groupsRoutes'))
 app.use('/api/dashboard', require('./routes/dashboardRoute'))
+app.use('/api/upload-file', require('./routes/uploadFileRoute'))
 
 app.listen(PORT, () => console.log(`app started on port ${PORT}`));
 connectToDb()
