@@ -156,7 +156,7 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
             state.user = action.payload
-            toast('اهلا ' + state?.user?.name, { toastId: '232rfre' })
+            toast(` (${state?.user?.name}) اهلا `, { toastId: '232rfre' })
 
         })
         builder.addCase(checkLoggedIn.rejected, (state, action) => {

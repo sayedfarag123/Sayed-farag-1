@@ -3,7 +3,7 @@ import './App.css'
 import Login from './pages/Login';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Home from './pages/Home';
+// import Home from './pages/Home';
 import { useDispatch, useSelector } from "react-redux";
 import StudentsList from './pages/Dashboard/StudentsList';
 import { BsMoon, BsSun } from 'react-icons/bs'
@@ -15,6 +15,8 @@ import { checkLoggedIn } from './store/authSlice';
 import GroupsList from './pages/Dashboard/GroupsList';
 import EditStudent from './pages/Dashboard/EditStudent';
 import Dashboard from './pages/Dashboard/Dashboard';
+import Student from './pages/Student';
+import Lessons from './pages/Lessons';
 
 
 
@@ -33,6 +35,10 @@ function App() {
 
   const CheckAuth = ({ children }) => (
     user == null ? <Navigate to='/login' /> : children
+  );
+
+  const CheckAdmin = ({ children }) => (
+    user?.role == 'مشرف' ? children : <Navigate to='/' />
   );
   const changeTheme = (changedTheme) => {
     // Remove existing theme classes from body
@@ -74,18 +80,22 @@ function App() {
         <BrowserRouter>
           <Header />
           <Routes>
-            <Route path='/' element={<CheckAuth><Home /></CheckAuth>} />
+            <Route path='/' element={<CheckAuth><Student /></CheckAuth>} />
+            <Route path='/lessons' element={<CheckAuth><Lessons /></CheckAuth>} />
             <Route path='/login' element={<CheckNotAuth><Login /></CheckNotAuth>} />
             <Route
               path='/dashboard/*'
               element={
                 <CheckAuth>
-                  <Routes>
-                    <Route path='dashboard' element={<Dashboard />} />
-                    <Route path='students' element={<StudentsList />} />
-                    <Route path='edit-student/:id' element={<EditStudent />} />
-                    <Route path='groups' element={<GroupsList />} />
-                  </Routes>
+                  <CheckAdmin>
+
+                    <Routes>
+                      <Route path='dashboard' element={<Dashboard />} />
+                      <Route path='students' element={<StudentsList />} />
+                      <Route path='edit-student/:id' element={<EditStudent />} />
+                      <Route path='groups' element={<GroupsList />} />
+                    </Routes>
+                  </CheckAdmin>
                 </CheckAuth>
               }
             />

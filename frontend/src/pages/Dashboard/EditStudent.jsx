@@ -12,13 +12,13 @@ const EditStudent = () => {
     const [addLesson, setaddLesson] = useState(false)
     const [addExam, setaddExam] = useState(false)
     const hw = useRef()
+    const att = useRef()
     const sig = useRef()
     const exam = useRef()
     const location = useRef()
     const examName = useRef()
     const examsig = useRef()
     const examdeg = useRef()
-    const navigate = useNavigate()
     const dispatch = useDispatch()
     const [Level, setLevel] = useState(user?.level?.toString())
 
@@ -73,7 +73,8 @@ const EditStudent = () => {
             sig: sig.current.value,
             exam: exam.current.value,
             location: location.current.value,
-            date: Date().slice(0, 24)
+            date: Date().slice(0, 24),
+            attendance: att.current.checked,
         }
         dispatch(addlesson({ lesson: data, id: user._id }))
         setaddLesson(false)
@@ -157,7 +158,9 @@ const EditStudent = () => {
                                     تاريخ الحضور
                                 </th>
                                 <th scope="col" className="px-6 py-3">
-
+                                    حضور
+                                </th>
+                                <th scope="col" className="px-6 py-3">
                                 </th>
                             </tr>
                         </thead>
@@ -179,6 +182,10 @@ const EditStudent = () => {
                                 </td>
                                 <td className="px-6 py-4">
                                     {ls.date}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {ls.attendance ? <BsFillClipboardCheckFill className=' w-5 h-5 text-green-500' /> : <BsFillClipboardXFill className=' w-5 h-5 text-red-500' />}
+
                                 </td>
                                 <td onClick={() => deleteLesson(ls)} className="px-6 py-4 cursor-pointer hover:text-red-600">
                                     Delete
@@ -202,10 +209,15 @@ const EditStudent = () => {
                                         {groups?.map(group => <option selected={group.group == user?.group} key={Math.random()} >{group.group}</option>)}
                                     </select>
                                 </td>
+                               
                                 <td className="px-6 py-4">
                                     {Date().slice(0, 24)}
+                                </td> <td className="px-6 py-4">
+                                    <input ref={att} type="checkbox" name="att" className=' w-5 h-5' />
+
                                 </td>
                                 <td className="px-6 py-4">
+                                   
                                 </td>
                             </tr>}
 
