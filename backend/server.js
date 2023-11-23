@@ -8,6 +8,7 @@ const helmet = require('helmet')
 const rateLimiting = require('express-rate-limit')
 const hpp = require('hpp')
 const cookieParser = require('cookie-parser');
+const path = require('path');
 
 app.use(cookieParser());
 app.use(rateLimiting({
@@ -38,3 +39,10 @@ app.use('/api/upload-file', require('./routes/uploadFileRoute'))
 app.listen(PORT, () => console.log(`app started on port ${PORT}`));
 connectToDb()
 
+const _dirname = path.resolve();
+
+app.use(express.static(path.join(_dirname, "../frontend/dist")));
+
+app.get("*", (req, res) =>
+  res.sendFile(path.join(_dirname, "../frontend/dist/index.html"))
+);

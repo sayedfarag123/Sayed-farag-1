@@ -8,9 +8,9 @@ const Home = () => {
   const navigate = useNavigate()
 
 
-  useEffect(() => {
-    user?.role == 'مشرف'&&navigate('/dashboard/dashboard')
-  }, [user])
+  // useEffect(() => {
+  //   user?.role == 'مشرف'&&navigate('/dashboard/dashboard')
+  // }, [user])
 
 
   return (

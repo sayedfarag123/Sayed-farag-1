@@ -1,4 +1,0 @@
-edit group select in 
-
-1-AddStudent component
-2-StudentsList

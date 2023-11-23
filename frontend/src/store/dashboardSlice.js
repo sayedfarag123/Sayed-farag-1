@@ -72,12 +72,13 @@ export const deleteGroup = createAsyncThunk('auth/deleteGroup', async (data, { r
 
 
 
-export const getStudent = createAsyncThunk('auth/getStudent', async (id, { rejectWithValue, getState }) => {
+export const getStudent = createAsyncThunk('auth/getStudent', async (id, { rejectWithValue, getState, dispatch }) => {
 
     try {
         //getStudent
         const res = await axios.get(`/api/students/get-student/${id}`, { withCredentials: true })
 
+        dispatch(getGroups(res.data.student.level.toString()))
         return res.data.student
 
     } catch (error) {
@@ -128,6 +129,26 @@ export const removeCompExam = createAsyncThunk('auth/addCompExam', async (data, 
     }
 
 })
+
+
+
+export const deleteStudents = createAsyncThunk('auth/deleteStudents', async (_, { rejectWithValue, getState }) => {
+
+    try {
+        //deleteStudents
+        const res = await axios.delete(`/api/students/delete-all-students`, { withCredentials: true })
+
+        return res.data
+
+    } catch (error) {
+
+        toast.error('حدث خطأ ما يرجي اعاده المحاولة')
+        console.log(error)
+        return rejectWithValue(error.response.data.message)
+    }
+
+})
+
 
 
 
@@ -263,7 +284,7 @@ const AuthSlice = createSlice({
         builder.addCase(uplodaFile.fulfilled, (state, action) => {
 
             state.isLoading = false
-            toast.success('تم العمليه بنجاح')
+            toast.success('تمت العمليه بنجاح')
 
         })
         builder.addCase(uplodaFile.rejected, (state, action) => {
@@ -329,7 +350,7 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
             state.groups.push(action.payload)
-            toast.success('تم العمليه بنجاح')
+            toast.success('تمت العمليه بنجاح')
         })
         builder.addCase(createGroup.rejected, (state, action) => {
 
@@ -360,7 +381,7 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
             state.groups = state.groups.filter(item => item._id !== action.payload.id)
-            toast.success('تم العمليه بنجاح')
+            toast.success('تمت العمليه بنجاح')
 
         })
         builder.addCase(deleteGroup.rejected, (state, action) => {
@@ -393,7 +414,7 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
             state.user = action.payload
-            toast.success('تم العمليه بنجاح')
+            toast.success('تمت العمليه بنجاح')
 
         })
         builder.addCase(addCompExam.rejected, (state, action) => {
@@ -410,7 +431,7 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
             state.user = action.payload
-            toast.success('تم العمليه بنجاح')
+            toast.success('تمت العمليه بنجاح')
 
         })
         builder.addCase(addlesson.rejected, (state, action) => {
@@ -427,10 +448,27 @@ const AuthSlice = createSlice({
 
             state.isLoading = false
             state.user = action.payload
-            toast.success('تم العمليه بنجاح')
+            toast.success('تمت العمليه بنجاح')
 
         })
         builder.addCase(removelesson.rejected, (state, action) => {
+
+            state.isLoading = false
+        })
+   
+        //get deleteStudents
+        builder.addCase(deleteStudents.pending, (state, action) => {
+
+            state.isLoading = true
+        })
+        builder.addCase(deleteStudents.fulfilled, (state, action) => {
+
+            state.isLoading = false
+            state.students.users = []
+            toast.success('تمت العمليه بنجاح')
+
+        })
+        builder.addCase(deleteStudents.rejected, (state, action) => {
 
             state.isLoading = false
         })

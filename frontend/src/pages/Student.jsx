@@ -16,7 +16,7 @@ const Student = () => {
         <div>
 
 
-            <div className=' w-full flex items-center flex-col p-5 rounded-md bg-white dark:bg-slate-900 mx-auto mb-10 mt-32'>
+           {user?.role =='طالب'&& <div className=' w-[95%] flex items-center flex-col p-5 rounded-md bg-white dark:bg-slate-900 mx-auto mb-10 mt-32'>
                 <img src={avatar} className=' -mt-20 w-28 h-28 bg-cover rounded-full bg-slate-100 dark:bg-slate-950 border-2 p-1' />
 
                 <span className=' dark:text-white font-extrabold text-3xl'>{user?.name}</span>
@@ -72,7 +72,7 @@ const Student = () => {
                     </div>
                 </div>
 
-            </div>
+            </div>}
 
 
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { IoClose,  IoSearchOutline } from "react-icons/io5";
+import { IoClose, IoSearchOutline } from "react-icons/io5";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import { deleteStudent } from '../../store/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +7,7 @@ import AddStudent from '../../components/dashboard/AddStudent';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { useNavigate } from 'react-router-dom';
-import { getGroups, getStudents,searchStudents } from '../../store/dashboardSlice';
+import { deleteStudents, getGroups, getStudents, searchStudents } from '../../store/dashboardSlice';
 import UploadFile from '../../components/dashboard/UploadFile';
 
 
@@ -20,7 +20,7 @@ const StudentsList = () => {
     const { groups } = useSelector(s => s.Dashboard)
     const navigate = useNavigate()
     const [Level, setLevel] = useState('ع')
-
+    const [mode, setmode] = useState()
 
 
     useEffect(() => {
@@ -45,7 +45,10 @@ const StudentsList = () => {
         query ? dispatch(searchStudents({ page, query })) : dispatch(getStudents({ page }))
     }
 
-
+    const deleteAllUsers = async () => {
+        setpopup(false)
+        dispatch(deleteStudents())
+    }
 
 
     return (
@@ -71,7 +74,9 @@ const StudentsList = () => {
                                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
                                 <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">هل انت متاكد</h3>
-                                <button onClick={deletestudent} data-modal-hide="popup-modal" type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
+                                <button onClick={() => {
+                                    mode == 'one' ? deletestudent() : deleteAllUsers()
+                                }} data-modal-hide="popup-modal" type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2">
                                     تأكيد
                                 </button>
                                 <button onClick={close} data-modal-hide="popup-modal" type="button" className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">الغاء</button>
@@ -89,15 +94,11 @@ const StudentsList = () => {
                 <div className="sm:flex sm:items-center sm:justify-between">
                     <div>
                         <div className="flex items-center gap-x-3">
-                            {/* <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">660</span> */}
                             <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">{students?.totalUsers}</span>
                             <h2 className="text-lg font-medium text-gray-800 dark:text-white">الطلاب</h2>
                         </div></div>
                     <div className="flex items-center mt-4 gap-x-3">
-                        {/* <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-lg gap-x-2 sm:w-auto dark:hover:bg-gray-800 dark:bg-gray-900 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700">
-                            <IoCloudUploadOutline className=' w-5 h-5' />
-                            <span>Import</span>
-                        </button> */}
+
                         <UploadFile />
 
 
@@ -121,7 +122,7 @@ const StudentsList = () => {
 
                         <IoSearchOutline className="w-5 h-5 -mr-7 z-30 text-gray-400 dark:text-gray-600" />
                         <form onSubmit={applySearch}>
-                            <input onChange={(e) => setsearchQuery(e.target.value)} type="text" placeholder="Search" className="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
+                            <input required onChange={(e) => setsearchQuery(e.target.value)} type="text" placeholder="Search" className="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" />
                         </form>
                         {query && <button onClick={() => dispatch(getStudents({ page: 1 }))} type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mx-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">الغاء</button>}
                     </div>
@@ -187,6 +188,7 @@ const StudentsList = () => {
 
                                             <td className="px-4 py-4 text-sm whitespace-nowrap">
                                                 <button onClick={() => {
+                                                    setmode('one')
                                                     setstud(std._id)
                                                     setpopup(true)
                                                 }} className="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
@@ -241,6 +243,16 @@ const StudentsList = () => {
                     </div>
                 </div>
             </section>
+
+            <div className=' mt-20 w-full text-center'>
+
+                <button onClick={() => {
+                    setmode('many')
+                    setpopup(true)
+                }} type="button" className="focus:outline-none w-[80%] max-w-3xl  my-8  text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                    حذف جميع الطلاب
+                </button>
+            </div>
 
         </div>
     )

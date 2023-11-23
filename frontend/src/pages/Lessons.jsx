@@ -5,6 +5,18 @@ import { useSelector } from 'react-redux'
 const Lessons = () => {
     const user = useSelector(s => s.Auth.user)
 
+
+
+    const showDate = (isoDateString) => {
+        const date = new Date(isoDateString);
+
+        date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        const formattedDate = date.toLocaleString('en-US', options);
+        return formattedDate
+    }
+
     return (
         <div> <div className=' w-[95%] max-w-5xl mx-auto mt-16'>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -46,7 +58,7 @@ const Lessons = () => {
                             <td className="px-6 py-4">
                                 {ls.location}
                             </td>
-                            
+
                             <td className="px-6 py-4">
                                 {/* {ls.attendance} */}
                                 {ls.attendance ? <BsFillClipboardCheckFill className=' w-5 h-5 text-green-500' /> : <BsFillClipboardXFill className=' w-5 h-5 text-red-500' />}
@@ -54,7 +66,7 @@ const Lessons = () => {
                             </td>
 
                             <td className="px-6 py-4">
-                                {ls.date}
+                                {showDate(ls.date)}
                             </td>
                         </tr>)}
 

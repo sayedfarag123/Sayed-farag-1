@@ -17,6 +17,7 @@ import EditStudent from './pages/Dashboard/EditStudent';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Student from './pages/Student';
 import Lessons from './pages/Lessons';
+import ComprExams from './pages/ComprExams';
 
 
 
@@ -81,7 +82,8 @@ function App() {
           <Header />
           <Routes>
             <Route path='/' element={<CheckAuth><Student /></CheckAuth>} />
-            <Route path='/lessons' element={<CheckAuth><Lessons /></CheckAuth>} />
+           <Route path='/lessons' element={<CheckAuth><Lessons /></CheckAuth>} />
+           <Route path='/comprehensive-exams' element={<CheckAuth><ComprExams /></CheckAuth>} />
             <Route path='/login' element={<CheckNotAuth><Login /></CheckNotAuth>} />
             <Route
               path='/dashboard/*'

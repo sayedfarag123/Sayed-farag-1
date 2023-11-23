@@ -150,7 +150,7 @@ const removeCompExam = async (req, res) => {
 const editStudent = async (req, res) => {
     const data = req.body
     try {
-        const student = await User.findByIdAndUpdate(data.id, data.data)
+        const student = await User.findByIdAndUpdate(data.id, data.data, { new: true })
 
 
 
@@ -166,9 +166,9 @@ const editStudent = async (req, res) => {
 const addLesson = async (req, res) => {
     const { lesson, id } = req.body
 
-        try {
+    try {
         const student = await User.findByIdAndUpdate(id,
-            { $push: { lessons:lesson } },
+            { $push: { lessons: lesson } },
             { new: true },)
 
 
@@ -188,11 +188,29 @@ const removeLesson = async (req, res) => {
     const { lesson, id } = req.body
     try {
         const student = await User.findByIdAndUpdate(id,
-            { $pull: { lessons:lesson } },
+            { $pull: { lessons: lesson } },
             { new: true },)
 
 
         return res.status(200).json({ error: false, student })
+
+
+    } catch (error) {
+        return res.status(400).json(error.message)
+
+    }
+
+
+}
+
+
+
+const deleteStudents = async (req, res) => {
+    try {
+        await User.deleteMany({ role: 'طالب' })
+
+
+        return res.status(200).json({ error: false, message: 'done' })
 
 
     } catch (error) {
@@ -214,5 +232,6 @@ module.exports = {
     removeCompExam,
     removeLesson,
     addLesson,
+    deleteStudents,
 
 }

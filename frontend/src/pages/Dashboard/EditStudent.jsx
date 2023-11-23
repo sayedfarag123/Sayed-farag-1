@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { deleteStudent, editStudents } from '../../store/authSlice'
 import { addCompExam, addlesson, getGroups, getStudent, removeCompExam, removelesson } from '../../store/dashboardSlice'
-
+import Select from 'react-select';
 const EditStudent = () => {
     const { groups, user } = useSelector(s => s.Dashboard)
     const { id } = useParams()
@@ -19,33 +19,45 @@ const EditStudent = () => {
     const examName = useRef()
     const examsig = useRef()
     const examdeg = useRef()
+    const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [Level, setLevel] = useState(user?.level?.toString())
-
+    const [Level, setLevel] = useState({ value: user.level, label: `${user.level}ثانوي` })
+    const [selectedOptionLevel, setSelectedOption] = useState();
 
     useEffect(() => {
         dispatch(getStudent(id))
+
     }, [id])
 
     useEffect(() => {
-        Level && dispatch(getGroups(Level))
-    }, [user, Level])
+
+        selectedOptionLevel && dispatch(getGroups(selectedOptionLevel.value?.toString()))
+    }, [user, selectedOptionLevel])
+
+    useEffect(() => {
+        user && setLevel({ value: user.level, label: `${user.level}ثانوي` })
+    }, [user])
+
+
+    const options = [1, 2, 3].map((lvl) => { return { value: lvl, label: `${lvl}ثانوي` } })
+
+
+
+
 
     const addStudent = async (e) => {
         e.preventDefault()
-
+        const phoneNumber = e.target.phoneNumber.value != user.phoneNumber ? e.target.phoneNumber.value : undefined
         const data = {
             name: e.target.name.value,
-            phoneNumber: e.target.phoneNumber.value,
+            phoneNumber,
             parentPhoneNumber: e.target.parentPhoneNumber.value,
             group: e.target.group.value,
             role: e.target.role.value,
-            level: e.target.level.value.slice(5, 6),
+            level: e.target.level.value,
 
         }
-        console.log({ data: data, id: user._id })
         dispatch(editStudents({ data: data, id: user._id }))
-
     }
 
     const addcomExam = async () => {
@@ -89,13 +101,16 @@ const EditStudent = () => {
 
     const deleteUser = async () => {
         dispatch(deleteStudent(user._id))
+        navigate('/dashboard/students')
     }
+
+   
 
 
 
     return (
         <div>
-            <form className=' p-4' onSubmit={addStudent}>
+            {user && <form className=' p-4' onSubmit={addStudent}>
                 <div className="grid gap-6 mb-6 md:grid-cols-2">
                     <div>
                         <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">اسم الطالب</label>
@@ -110,10 +125,16 @@ const EditStudent = () => {
                         <input maxLength='11' defaultValue={user?.parentPhoneNumber} name='parentPhoneNumber' type='text' id="last_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                     </div>
                     <div>
-                        <label htmlFor="website" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">المجموعة</label>
-                        <select onChange={(e) => setLevel(e.target.value.slice(5, 6))} name='level' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >
-                            {[1, 2, 3].map(lvl => <option selected={lvl == user?.level} key={Math.random()} >ثانوي{lvl}</option>)}
-                        </select>
+                        <label htmlFor="website" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">المرحله</label>
+                        <Select
+                        name='level'
+                            className='rounded-lg cursor-pointer'
+                            classNamePrefix='bg-gray-50 dark:text-white text-gray-900 text-sm p-[1px]  dark:bg-gray-700 cursor-pointer '
+                            value={selectedOptionLevel || Level}
+                            onChange={setSelectedOption}
+                            options={options}
+                            isSearchable={false}
+                        />
                     </div>
                     <div>
                         <label htmlFor="website" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">المجموعة</label>
@@ -133,7 +154,7 @@ const EditStudent = () => {
 
 
                 <button type="submit" className="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm   px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">حفظ</button>
-            </form>
+            </form>}
 
             <h1 className=' text-2xl font-semibold  dark:text-white w-full text-center'>الحصص الاسبوعيه</h1>
 
@@ -209,7 +230,7 @@ const EditStudent = () => {
                                         {groups?.map(group => <option selected={group.group == user?.group} key={Math.random()} >{group.group}</option>)}
                                     </select>
                                 </td>
-                               
+
                                 <td className="px-6 py-4">
                                     {Date().slice(0, 24)}
                                 </td> <td className="px-6 py-4">
@@ -217,7 +238,7 @@ const EditStudent = () => {
 
                                 </td>
                                 <td className="px-6 py-4">
-                                   
+
                                 </td>
                             </tr>}
 
