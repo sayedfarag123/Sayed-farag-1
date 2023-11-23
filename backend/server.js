@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 8000
 const cors = require('cors');
-const connectToDb = require('./config/connectToDB')
+// const connectToDb = require('./config/connectToDB')
 const helmet = require('helmet')
 const rateLimiting = require('express-rate-limit')
 const hpp = require('hpp')
@@ -37,7 +37,7 @@ app.use('/api/dashboard', require('./routes/dashboardRoute'))
 app.use('/api/upload-file', require('./routes/uploadFileRoute'))
 
 app.listen(PORT, () => console.log(`app started on port ${PORT}`));
-connectToDb()
+// connectToDb()
 
 const _dirname = path.resolve();
 
