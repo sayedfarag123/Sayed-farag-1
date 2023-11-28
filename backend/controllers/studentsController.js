@@ -6,13 +6,15 @@ const User = require("../models/userModel");
 
 const getStudents = async (req, res) => {
     try {
-        const page = parseInt(req.body.page) || 1;
+        const pagee = parseInt(req.body.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
-        const skip = (page - 1) * limit;
+        const skip = (pagee - 1) * limit;
 
-        const filter = req.body.Level
+        const { page, ...filter } = req.body
 
-        const query = filter ? { level: filter, role: 'طالب' } : { role: 'طالب' }
+
+
+        const query = filter ? { role: 'طالب', ...filter } : { role: 'طالب' };
 
 
         const users = await User.find(query)
@@ -20,12 +22,12 @@ const getStudents = async (req, res) => {
             .limit(limit)
             .exec();
 
-        const totalCount = await User.countDocuments({ role: 'طالب' });
+        const totalCount = await User.countDocuments(query);
 
         return res.json({
             error: false,
             users,
-            page,
+            page: pagee,
             totalPages: Math.ceil(totalCount / limit),
             totalUsers: totalCount,
         });

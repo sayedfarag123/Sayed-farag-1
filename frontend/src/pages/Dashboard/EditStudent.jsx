@@ -43,6 +43,10 @@ const EditStudent = () => {
 
 
 
+    useEffect(() => {
+      console.log(user)
+    }, [user])
+    
 
 
     const addStudent = async (e) => {

@@ -5,9 +5,9 @@ const User = require("../models/userModel")
 
 
 const createUser = async (req, res) => {
-    const { name, phoneNumber, parentPhoneNumber, group,level,role } = req.body
+    const { name, phoneNumber, parentPhoneNumber, group, level, role } = req.body
     try {
-        if (!name && !phoneNumber &&!role&&!level&& !parentPhoneNumber && !group) return res.status(400).json({ error: true, message: 'name and group and phone number and parent Phone Number are required' })
+        if (!name && !phoneNumber && !role && !level && !parentPhoneNumber && !group) return res.status(400).json({ error: true, message: 'name and group and phone number and parent Phone Number are required' })
 
         const query = {
             $or: [
@@ -28,7 +28,7 @@ const createUser = async (req, res) => {
             group,
             level,
             role,
-            createdAt:new Date().toLocaleString('en-US', { timeZone: 'Africa/Cairo' }),
+            createdAt: new Date().toLocaleString('en-US', { timeZone: 'Africa/Cairo' }),
         })
 
         return res.status(200).json({ error: false, user: createdUser })
@@ -48,10 +48,14 @@ const login = async (req, res) => {
     try {
         if (!name && !phoneNumber) return res.status(400).json({ error: true, message: 'name and phone number are required' })
 
+        const cleanedPhoneNumber = phoneNumber.startsWith('0') ? phoneNumber.substring(1) : phoneNumber;
+
         const query = {
             $or: [
-                { phoneNumber: { $eq: parseInt(phoneNumber) } },
-                { parentPhoneNumber: { $eq: parseInt(phoneNumber) } },
+                { phoneNumber: { $eq: phoneNumber } },
+                { phoneNumber: { $eq: cleanedPhoneNumber } }, // Match without leading zero
+                { parentPhoneNumber: { $eq: phoneNumber } },
+                { parentPhoneNumber: { $eq: cleanedPhoneNumber } }, // Match without leading zero
             ],
             name: { $regex: new RegExp(name, 'i') }
         };
@@ -62,11 +66,15 @@ const login = async (req, res) => {
 
         const accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_PRIVATE_KEY, { expiresIn: '30d' })
 
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 30);
+
         res.cookie("access_token", accessToken, {
             httpOnly: true,
             secure: true,
             sameSite: "none",
-        })
+            expires: expirationDate, 
+        });
 
         return res.status(200).json({ error: false, user })
 

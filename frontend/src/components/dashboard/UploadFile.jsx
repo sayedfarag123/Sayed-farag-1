@@ -56,6 +56,7 @@ const UploadFile = () => {
                 </button>}
 
             <input
+             accept=".xls, .xlsx"
                 onChange={e =>setFile(e.target.files[0])}
                 id='xlsx'  // Use 'id' instead of 'name' for associating with 'htmlFor'
                 name='xlsx'  // Use 'id' instead of 'name' for associating with 'htmlFor'

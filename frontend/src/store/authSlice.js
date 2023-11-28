@@ -7,11 +7,11 @@ export const checkLoggedIn = createAsyncThunk('auth/checkLoggedIn', async (id, {
     try {
         const res = await axios.post('/api/users/check-logged-in', { withCredentials: true })
 
-        localStorage.setItem('user', JSON.stringify(res.data))
+        localStorage.setItem('user', JSON.stringify(res.data.user))
         return res.data.user
 
     } catch (error) {
-        localStorage.clear()
+        // localStorage.clear()
         // toast.error('حدث خطأ ما يرجي اعاده المحاولة')
         return rejectWithValue(error.response.data.message)
     }

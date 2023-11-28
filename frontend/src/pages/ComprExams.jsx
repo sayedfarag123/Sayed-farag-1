@@ -28,10 +28,10 @@ const ComprExams = () => {
                         {ex.name}
                     </th>
                     <td className="px-6 py-4">
-                        {ex.sig}
+                        {ex.deg}
                     </td>
                     <td className="px-6 py-4">
-                        {ex.deg}
+                        {ex.sig}
                     </td>
 
                    

@@ -26,7 +26,6 @@ router.post('/upload-excel-cheat', roleMiddleware, authMiddleware, upload.single
 
         const updatePromises = data.map(async (user) => {
             let updateData;
-            console.log(user)
             if (user.deg) {
                 updateData = {
                     $push: {
@@ -39,7 +38,7 @@ router.post('/upload-excel-cheat', roleMiddleware, authMiddleware, upload.single
                     },
                 };
             } else {
-                const booleanValue = user.hw.toLowerCase() === "true";
+                const booleanValue = user.hw || user.hw.toLowerCase() === "true";
                 updateData = {
                     $push: {
                         lessons: {

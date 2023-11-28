@@ -7,27 +7,48 @@ import AddStudent from '../../components/dashboard/AddStudent';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { useNavigate } from 'react-router-dom';
-import { deleteStudents, getGroups, getStudents, searchStudents } from '../../store/dashboardSlice';
+import { deleteStudents, getGroups, getStudents, searchStudents, setfilterV } from '../../store/dashboardSlice';
 import UploadFile from '../../components/dashboard/UploadFile';
 
 
 const StudentsList = () => {
     const dispatch = useDispatch()
-    const { students } = useSelector(s => s.Dashboard)
+    const { students,filterV } = useSelector(s => s.Dashboard)
     const [popup, setpopup] = useState(false)
     const [stud, setstud] = useState()
     const [query, setsearchQuery] = useState()
     const { groups } = useSelector(s => s.Dashboard)
     const navigate = useNavigate()
-    const [Level, setLevel] = useState('ع')
+    const [Level, setLevel] = useState(filterV?.level||'ع')
     const [mode, setmode] = useState()
-
+    const [selectedGroup, setselectedGroup] = useState(filterV?.group||'ع')
+    const [filter, setfilter] = useState(filterV)
 
     useEffect(() => {
+    
+        const fetchData = async () => {
+            let filter = {};
 
-        Level == 'ع' ? dispatch(getStudents({ page: 1 })) : dispatch(getStudents({ page: 1, Level }))
-        Level == 'ع' ? dispatch(getGroups('all')) : dispatch(getGroups(Level))
-    }, [Level])
+            if (Level === 'ع') {
+                dispatch(getGroups('all'));
+            } else {
+                dispatch(getGroups(Level));
+                filter.level = Level;
+            }
+
+            if (selectedGroup !== 'ع') {
+                filter.group = selectedGroup;
+            }
+
+            setfilter(filter);
+            dispatch(getStudents(filter));
+            dispatch(setfilterV(filter));
+
+            
+        };
+
+        fetchData();
+    }, [selectedGroup, Level]);
 
     const deletestudent = () => {
         setpopup(false)
@@ -42,7 +63,7 @@ const StudentsList = () => {
     }
 
     const paginate = (page) => {
-        query ? dispatch(searchStudents({ page, query })) : dispatch(getStudents({ page }))
+        query ? dispatch(searchStudents({ page, query })) : dispatch(getStudents({ page, ...filter }))
     }
 
     const deleteAllUsers = async () => {
@@ -109,12 +130,22 @@ const StudentsList = () => {
 
                 <div className="mt-6 md:flex md:items-center md:justify-between">
                     <div>
-                        <div className="inline-flex overflow-hidden bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
+                        <div className="inline-flex m-2 overflow-hidden bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
                             <select selected={Level == 'ع'} onChange={e => setLevel(e.target.value.slice(5, 6))} className="w-48 dark:text-white outline-none p-2  text-sm bg-white border border-gray-300 rounded-lg shadow-md dark:bg-gray-700 dark:border-gray-600">
                                 <option>الجميع</option>
                                 {[1, 2, 3].map(lvl => <option selected={Level == lvl} key={Math.random()} >ثانوي{lvl}</option>)}
                             </select>
                         </div>
+
+                        <div className="inline-flex m-2 overflow-hidden bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
+                            <select selected={selectedGroup == 'ع'} onChange={e => setselectedGroup(e.target.value)} className="w-48 dark:text-white outline-none p-2  text-sm bg-white border border-gray-300 rounded-lg shadow-md dark:bg-gray-700 dark:border-gray-600">
+                                <option value='ع'>الجميع</option>
+                                {groups?.map(grp => <option selected={grp.group == selectedGroup} key={Math.random()} >{grp.group}</option>)}
+
+                            </select>
+                        </div>
+
+
 
                     </div>
 

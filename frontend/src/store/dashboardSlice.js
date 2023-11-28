@@ -84,7 +84,7 @@ export const getStudent = createAsyncThunk('auth/getStudent', async (id, { rejec
     } catch (error) {
 
         toast.error('حدث خطأ ما يرجي اعاده المحاولة')
-        console.log(error)
+        console.log(error.message)
         return rejectWithValue(error.response.data.message)
     }
 
@@ -258,18 +258,22 @@ export const uplodaFile = createAsyncThunk('auth/uplodaFile', async (formData, {
 
 const initstate = {
     groups: [],
-    user: '',
+    user:'',
     students: [],
-    dbData: {}
+    dbData: {},
+    filterV:{},
 }
 
 const AuthSlice = createSlice({
-    name: "group",
+    name: "dashboard",
     initialState: initstate,
     reducers: {
         togglePopUp: (state, action) => {
             state.popup.show = !state.popup.show
             state.popup.value = action.payload
+        },
+        setfilterV: (state, action) => {
+            state.filterV = action.payload
         },
 
     },
@@ -393,6 +397,7 @@ const AuthSlice = createSlice({
         builder.addCase(getStudent.pending, (state, action) => {
 
             state.isLoading = true
+            state.user = ''
         })
         builder.addCase(getStudent.fulfilled, (state, action) => {
 
@@ -480,4 +485,4 @@ const AuthSlice = createSlice({
 
 
 export default AuthSlice.reducer
-export const { togglePopUp } = AuthSlice.actions
+export const { togglePopUp,setfilterV } = AuthSlice.actions

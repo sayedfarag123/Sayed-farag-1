@@ -14,7 +14,8 @@ const getAnalytics = async (req, res) => {
             User.aggregate([
                 {
                     $match: {
-                        createdAt: { $gte: startDate }
+                        createdAt: { $gte: startDate },
+                        role:'طالب'
                     }
                 },
                 {
