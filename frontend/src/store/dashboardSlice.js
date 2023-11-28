@@ -267,6 +267,7 @@ const initstate = {
 const AuthSlice = createSlice({
     name: "dashboard",
     initialState: initstate,
+    
     reducers: {
         togglePopUp: (state, action) => {
             state.popup.show = !state.popup.show
