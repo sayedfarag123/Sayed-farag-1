@@ -78,7 +78,7 @@ router.post('/upload-excel-cheat', roleMiddleware, authMiddleware, upload.single
         });
 
         // Wait for all updates to complete before deleting the file
-        await Promise.all([...updatePromises, ...addLessonPromises]);
+        data[0].deg? await Promise.all([...updatePromises, ...addLessonPromises]):await Promise.all([...updatePromises])
 
         // Remove the file after processing
         await fs.unlink(filePath);

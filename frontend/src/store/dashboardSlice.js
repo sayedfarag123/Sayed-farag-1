@@ -487,3 +487,47 @@ const AuthSlice = createSlice({
 
 export default AuthSlice.reducer
 export const { togglePopUp,setfilterV } = AuthSlice.actions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
